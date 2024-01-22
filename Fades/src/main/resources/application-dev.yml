@@ -1,0 +1,10 @@
+ACCESS_TOKEN_PRIVATE_KEY_PATH: "access-refresh-token-keys/access-token-private.key"
+ACCESS_TOKEN_PUBLIC_KEY_PATH: "access-refresh-token-keys/access-token-public.key"
+REFRESH_TOKEN_PRIVATE_KEY_PATH: "access-refresh-token-keys/refresh-token-private.key"
+REFRESH_TOKEN_PUBLIC_KEY_PATH: "access-refresh-token-keys/refresh-token-public.key"
+MONGODB_USER: "admin"
+MONGODB_PASSWORD: "dLb12iixHtSzs5cr"
+MONGODB_HOST: "localhost"
+MONGODB_PORT: '27017'
+MONGODB_DB: "fades-api-db"
+MONGODB_CLUSTER: "@cluster0.ne4eccq.mongodb.net"

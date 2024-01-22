@@ -1,5 +1,12 @@
 import React from "react";
-import { FaUserNinja, FaLock } from "react-icons/fa6";
+import {
+  FaUserNinja,
+  FaLock,
+  FaGithub,
+  FaGoogle,
+  FaFacebook,
+  FaLinkedinIn,
+} from "react-icons/fa6";
 import "./Login.css";
 
 const Login = () => {
@@ -10,25 +17,39 @@ const Login = () => {
 
         <div className="input-box">
           <input type="text" placeholder="username" required />
-          <FaUserNinja  className="icon"/>
+          <FaUserNinja className="icon" />
         </div>
         <div className="input-box">
           <input type="password" placeholder="password" required />
-          <FaLock className="icon"/>
+          <FaLock className="icon" />
         </div>
         <div className="remember-forgot">
           <label>
             <input type="checkbox" />
             Remember me
           </label>
-          <a href="#">Forgot password?</a>
+          <a href="/#">Forgot password?</a>
         </div>
         <input type="submit" value="Login" />
 
         <div className="register-link">
           <p>
-            Don't have an account? <a href="#">Register here</a>
+            Don't have an account? <a href="/#">Register here</a>
           </p>
+        </div>
+        <div className="socials-login">
+          <a href="/#" target="_blank" rel="noopener noreferrer">
+            <FaGithub className="icon" />
+          </a>
+          <a href="/#" target="_blank" rel="noopener noreferrer">
+            <FaGoogle className="icon" />
+          </a>
+          <a href="/#" target="_blank" rel="noopener noreferrer">
+            <FaFacebook className="icon" />
+          </a>
+          <a href="/#" target="_blank" rel="noopener noreferrer">
+            <FaLinkedinIn className="icon" />
+          </a>
         </div>
       </form>
     </div>
