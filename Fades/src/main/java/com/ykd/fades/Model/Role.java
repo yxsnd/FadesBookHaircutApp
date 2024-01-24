@@ -1,2 +1,7 @@
-package com.ykd.fades.Model;public enum Role {
+package com.ykd.fades.model;
+
+public enum Role {
+
+    USER,
+    ADMIN
 }
