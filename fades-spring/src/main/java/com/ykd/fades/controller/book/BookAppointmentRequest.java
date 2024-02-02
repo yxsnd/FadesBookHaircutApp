@@ -22,7 +22,7 @@ public class BookAppointmentRequest {
     private String memo;
 
     @JsonCreator
-    public BookAppointmentRequest(@JsonProperty("employee") Integer employeeId, @JsonProperty("date") Date date, @JsonProperty("timeSlotBooked") String timeSlotsBooked, @JsonProperty("memo") String memo) {
+    public BookAppointmentRequest(@JsonProperty("employeeId") Integer employeeId, @JsonProperty("date") Date date, @JsonProperty("timeSlotsBooked") String timeSlotsBooked, @JsonProperty("memo") String memo) {
         this.employeeId = employeeId;
         this.date = date;
         this.timeSlotsBooked = timeSlotsBooked;

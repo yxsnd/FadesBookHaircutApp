@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -21,27 +22,33 @@ public class BookAppointmentService {
 
     public Appointment book(BookAppointmentRequest request) {
 
-        System.out.println(request);
+        boolean dupFound = false;
+        // validate if there is a booking for that employee on that date at that time
+        // get all the appointments for the employee
+        List<Appointment> listOfAppointments = appointmentRepository.findAppointmentsForEmployee(request.getEmployeeId());
+        for (int i = 0; i < listOfAppointments.size(); i++) {
+            if (request.getDate().equals(listOfAppointments.get(i).getDate()) && request.getTimeSlotsBooked().equals(listOfAppointments.get(i).getTimeSlotsBooked())) {
+                dupFound = true;
+                break;
+            }
+        }
 
-//        List<Employee> foundEmployee = new ArrayList<Employee>();
-//        try {
-//            foundEmployee = (employeeService.getEmployeeByEmployeeId(request.getEmployee().getId()));
-//        }
-//        catch (Exception error) {
-//            System.out.println(error);
-//        }
-        var bookAppointment = Appointment.builder()
-                .employeeId(request.getEmployeeId())
-                .date(request.getDate())
-                .timeSlotsBooked(request.getTimeSlotsBooked())
-                .memo(request.getMemo())
-                .build();
+        System.out.println(dupFound);
+        if (!dupFound) {
+            Appointment bookAppointment = Appointment.builder()
+                    .employeeId(request.getEmployeeId())
+                    .date(request.getDate())
+                    .timeSlotsBooked(request.getTimeSlotsBooked())
+                    .memo(request.getMemo())
+                    .build();
+            appointmentRepository.save(bookAppointment);
+            return bookAppointment;
+        } else {
+            return null;
 
-        appointmentRepository.save(bookAppointment);
 
-        return bookAppointment;
+        }
 
-        //appointmentRepository.findAppointmentsForEmployee(request.getEmployeeId());
 
     }
 }

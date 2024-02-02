@@ -9,6 +9,10 @@ import { PickersDay } from "@mui/x-date-pickers/PickersDay";
 import CheckIcon from "@mui/icons-material/Check";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 import { Button, Container } from "@mui/material";
+import Alert from "@mui/material/Alert";
+import { set } from "date-fns";
+
+
 
 const Booking = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -16,14 +20,25 @@ const Booking = () => {
   const [highlightedDays, setHighlightedDays] = useState([
     new Date().getDate(),
   ]);
-  const [selectedBarber, setSelectedBarber] = useState("");
+  const [selectedBarberName, setSelectedBarberName] = useState("");
+  const [selectedBarberObject, setSelectedBarberObject] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [barbersToSelectFrom, setBarbersToSelectFrom] = useState([]);
   const [disabledTimes, setDisabledTimes] = useState([""]);
+  const [showAlert, setShowAlert] = useState("");
+  
   //(["9:00 AM", "10:00 AM"]);
 
   const handleSelectChange = (e) => {
-    setSelectedBarber(e.target.value);
+    console.log(e.target.value);
+    setSelectedBarberName(e.target.value);
+    if (selectedBarberName) {
+      // Parse the selectedValue back to an object
+      const selectedEmployee = JSON.parse(selectedBarberName);
+      setSelectedBarberObject(selectedEmployee);
+    } else {
+      setSelectedBarberObject({});
+    }
     //run axios to get all the appointments that barber has
   };
 
@@ -32,14 +47,17 @@ const Booking = () => {
       try {
         const response = await api.post("api/v1/auth/bookAppointment/book", {
           employeeId: barbersToSelectFrom.find(
-            (employee) => employee.value === selectedBarber
+            (employee) => employee.firstname === selectedBarberName.split(" ")[0]
           ).id,
           date: selectedDate,
           timeSlotsBooked: selectedTime,
-          memo: "This is a memo"
+          memo: "This is a memo",
+        }).then((response) =>{
+            console.log(response.data)
         });
       } catch (error) {
-        console.error("Error fetching data:", error);
+        setShowAlert(error.message);
+        console.error("Error fetching data for error ", error);
       }
     };
 
@@ -68,7 +86,7 @@ const Booking = () => {
   return (
     <div>
       <h2>Select an Barber:</h2>
-      <select value={selectedBarber} onChange={handleSelectChange}>
+      <select value={selectedBarberName} onChange={handleSelectChange}>
         <option value="">Select...</option>
         {barbersToSelectFrom.map((employee) => (
           <option key={employee.id} value={employee.value}>
@@ -76,7 +94,12 @@ const Booking = () => {
           </option>
         ))}
       </select>
-      {selectedBarber && <p>You selected: {selectedBarber}</p>}
+      {showAlert ? (
+        <Alert severity="error" onClose={() => setShowAlert(null)}>
+             <span className="font-medium">Error!</span> {showAlert}
+        </Alert>
+      ): null}
+      {selectedBarberName && <p>You selected: {selectedBarberName}</p>}
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <Container className="max-w-36">
           <StaticDatePicker

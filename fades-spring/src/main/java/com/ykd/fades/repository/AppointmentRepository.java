@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, Integer> {
-//    @Query("SELECT a FROM Appointment a WHERE a.employee_id = ?1")
-//    List<Appointment> findAppointmentsForEmployee(Employee employee_id);
+    @Query("SELECT a FROM Appointment a WHERE a.employeeId = ?1")
+    List<Appointment> findAppointmentsForEmployee(Integer employee_id);
 
 }
