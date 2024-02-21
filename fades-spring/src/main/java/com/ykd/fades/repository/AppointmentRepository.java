@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, Integer> {
     @Query("SELECT a FROM Appointment a WHERE a.employeeId = ?1")
-    List<Appointment> findAppointmentsForEmployee(Integer employee_id);
+    List<Appointment> findAppointmentsForEmployee(Integer employeeId);
 
 }

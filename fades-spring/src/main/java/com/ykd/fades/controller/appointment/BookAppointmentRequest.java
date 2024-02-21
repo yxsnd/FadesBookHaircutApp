@@ -1,4 +1,4 @@
-package com.ykd.fades.controller.book;
+package com.ykd.fades.controller.appointment;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -21,7 +21,7 @@ public class EmployeeService {
 
     }
 
-    public List<Employee> getEmployeeByEmployeeId(Integer employeeId) {
-        return employeeRepository.findListById(employeeId);
-    }
+//    public List<Employee> getEmployeeByEmployeeId(Integer employeeId) {
+//        return employeeRepository.findListById(employeeId);
+//    }
 }

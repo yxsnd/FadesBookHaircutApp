@@ -1,5 +1,6 @@
 package com.ykd.fades.controller.employee;
 
+import com.ykd.fades.model.Appointment;
 import com.ykd.fades.model.Employee;
 import com.ykd.fades.service.employee.EmployeeRequest;
 import com.ykd.fades.service.employee.EmployeeService;

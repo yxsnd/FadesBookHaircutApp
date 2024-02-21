@@ -1,15 +1,13 @@
-package com.ykd.fades.service.book;
+package com.ykd.fades.service.appointment;
 
-import com.ykd.fades.controller.book.BookAppointmentRequest;
+import com.ykd.fades.controller.appointment.AllAppointmentsRequest;
+import com.ykd.fades.controller.appointment.BookAppointmentRequest;
 import com.ykd.fades.model.Appointment;
-import com.ykd.fades.model.Employee;
 import com.ykd.fades.repository.AppointmentRepository;
 import com.ykd.fades.service.employee.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -50,5 +48,17 @@ public class BookAppointmentService {
         }
 
 
+    }
+
+    public List<Appointment> getAppointmentsByEmployeeId(Integer employeeId) {
+        List<Appointment> listOfAppointments = appointmentRepository.findAppointmentsForEmployee(employeeId);
+        System.out.println(listOfAppointments);
+        for (Appointment appointment : listOfAppointments) {
+            System.out.println(appointment);
+        }
+        {
+
+        }
+        return appointmentRepository.findAppointmentsForEmployee(employeeId);
     }
 }

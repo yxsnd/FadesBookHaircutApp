@@ -12,8 +12,6 @@ import { Button, Container } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import { set } from "date-fns";
 
-
-
 const Booking = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [listOfEmployees, setListOfEmployees] = useState([]);
@@ -21,40 +19,64 @@ const Booking = () => {
     new Date().getDate(),
   ]);
   const [selectedBarberName, setSelectedBarberName] = useState("");
-  const [selectedBarberObject, setSelectedBarberObject] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [barbersToSelectFrom, setBarbersToSelectFrom] = useState([]);
+  const [appointmentsForSelectedBarber, setAppointmentsForSelectedBarber] =
+    useState([]);
   const [disabledTimes, setDisabledTimes] = useState([""]);
+
   const [showAlert, setShowAlert] = useState("");
-  
+
   //(["9:00 AM", "10:00 AM"]);
 
-  const handleSelectChange = (e) => {
+  const handleBarberSelectChange = (e) => {
     console.log(e.target.value);
     setSelectedBarberName(e.target.value);
-    if (selectedBarberName) {
-      // Parse the selectedValue back to an object
-      const selectedEmployee = JSON.parse(selectedBarberName);
-      setSelectedBarberObject(selectedEmployee);
-    } else {
-      setSelectedBarberObject({});
-    }
     //run axios to get all the appointments that barber has
+    console.log(e.target.value.split(" ")[0]);
+    console.log(barbersToSelectFrom);
+    console.log(
+      barbersToSelectFrom.find(
+        (barber) => barber.firstname === e.target.value.split(" ")[0]
+      ).id
+    );
+    const getAppointments = async () => {
+      try {
+        const response = await api
+          .get("api/v1/auth/getAppointments", {
+            params: {
+              employeeId: barbersToSelectFrom.find(
+                (barber) => barber.firstname === e.target.value.split(" ")[0]
+              ).id,
+            },
+          })
+          .then((response) => {
+            console.log(response.data);
+            setAppointmentsForSelectedBarber(response.data);
+          });
+      } catch (error) {
+        console.error("Error fetching data for error ", error);
+      }
+    };
+    getAppointments();
   };
 
   const doBooking = () => {
     const bookAppointment = async () => {
       try {
-        const response = await api.post("api/v1/auth/bookAppointment/book", {
-          employeeId: barbersToSelectFrom.find(
-            (employee) => employee.firstname === selectedBarberName.split(" ")[0]
-          ).id,
-          date: selectedDate,
-          timeSlotsBooked: selectedTime,
-          memo: "This is a memo",
-        }).then((response) =>{
-            console.log(response.data)
-        });
+        const response = await api
+          .post("api/v1/auth/bookAppointment/book", {
+            employeeId: barbersToSelectFrom.find(
+              (employee) =>
+                employee.firstname === selectedBarberName.split(" ")[0]
+            ).id,
+            date: selectedDate,
+            timeSlotsBooked: selectedTime,
+            memo: "This is a memo",
+          })
+          .then((response) => {
+            console.log(response.data);
+          });
       } catch (error) {
         setShowAlert(error.message);
         console.error("Error fetching data for error ", error);
@@ -62,6 +84,26 @@ const Booking = () => {
     };
 
     bookAppointment();
+  };
+
+  const handleSelectDate = (newDate) => {
+    const doHandleSelectDate = async () => {
+      setSelectedDate(newDate);
+      if (appointmentsForSelectedBarber) {
+        console.log(appointmentsForSelectedBarber);
+        console.log(
+          appointmentsForSelectedBarber[0].date.split("T")[0] ===
+            selectedDate.toISOString().split("T")[0]
+        );
+        if (
+          appointmentsForSelectedBarber[0].date.split("T")[0] ===
+          selectedDate.toISOString().split("T")[0]
+        ) {
+          console.log("match");
+        }
+      }
+    };
+    doHandleSelectDate();
   };
 
   useEffect(() => {
@@ -86,7 +128,7 @@ const Booking = () => {
   return (
     <div>
       <h2>Select an Barber:</h2>
-      <select value={selectedBarberName} onChange={handleSelectChange}>
+      <select value={selectedBarberName} onChange={handleBarberSelectChange}>
         <option value="">Select...</option>
         {barbersToSelectFrom.map((employee) => (
           <option key={employee.id} value={employee.value}>
@@ -96,9 +138,9 @@ const Booking = () => {
       </select>
       {showAlert ? (
         <Alert severity="error" onClose={() => setShowAlert(null)}>
-             <span className="font-medium">Error!</span> {showAlert}
+          <span className="font-medium">Error!</span> {showAlert}
         </Alert>
-      ): null}
+      ) : null}
       {selectedBarberName && <p>You selected: {selectedBarberName}</p>}
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <Container className="max-w-36">
@@ -112,10 +154,11 @@ const Booking = () => {
             openTo="day"
             value={selectedDate}
             disablePast
-            onChange={(newDate) => setSelectedDate(newDate)}
+            onChange={handleSelectDate}
             renderInput={(params) => {
               <TextField {...params} />;
             }}
+            autoFocus={true}
             // renderDay={(day, _value, DayComponentProps) => {
             //   const isSelected =
             //     !DayComponentProps.outsideCurrentMonth &&
